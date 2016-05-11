@@ -1,8 +1,11 @@
 require 'Nokogiri'
 require 'JSON'
-require 'Pry'
+# require 'Pry'
 require 'csv'
 require 'open-uri'
+# require "whenever"
+
+require 'clockwork'
 
 #gets the type of incident, time of occurence, further explaination (comments), and disposition
 def extract(column)
@@ -18,7 +21,6 @@ def extract(column)
 	}
 	return array
 end
-
 
 url = 'https://incidentreports.uchicago.edu/incidentReportArchive.php'
 start_day = 4
@@ -56,4 +58,8 @@ CSV.open("crimesdata.csv", "w") do |csv|
 		csv << col
 	end
 end
+
+# puts "hello i'm salina \n"
+# print(cols)
+# Pry.start(binding)
 
