@@ -1,8 +1,11 @@
 require 'Nokogiri'
 require 'JSON'
-require 'Pry'
+# require 'Pry'
 require 'csv'
 require 'open-uri'
+# require "whenever"
+
+require 'clockwork'
 
 #gets the type of incident, time of occurence, further explaination (comments), and disposition
 def extract(column)
@@ -17,7 +20,6 @@ def extract(column)
 			array.push(a.text.delete("\n")) }
 	return array
 end
-
 
 url = 'https://incidentreports.uchicago.edu/incidentReportArchive.php'
 start_day = 4
@@ -43,4 +45,6 @@ for i in 0..num_pages
 	table.each { |a| cols.push(extract(a.css("td"))) }
 end
 
-Pry.start(binding)
+# puts "hello i'm salina \n"
+print(cols)
+# Pry.start(binding)
