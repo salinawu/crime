@@ -14,7 +14,8 @@ def extract(column)
 			next
 		end
 			i+=1
-			array.push(a.text.delete("\n")) }
+			array.push(a.text.delete("\n"))
+	}
 	return array
 end
 
@@ -31,16 +32,28 @@ dates = "?startDate=#{start_day}%2F#{start_month}%2F#{start_year}&endDate=#{end_
 
 parse_page = Nokogiri::HTML(open(url + dates))
 num_pages = Integer(parse_page.css(".page-count").text.split("/")[1].strip) -1
-table = parse_page.css(".ucpd tbody")
-
+table = parse_page.css("tr")
 cols = []
+
 for i in 0..num_pages
 	offset = 5*i
 	dates = "?startDate=#{start_day}%2F#{start_month}%2F#{start_year}&endDate=#{end_day}%2F#{end_month}%2F#{end_year}&offset=#{offset}"
 	parse_page = Nokogiri::HTML(open(url + dates))
 	num_pages = Integer(parse_page.css(".page-count").text.split("/")[1].strip) -1
-	table = parse_page.css(".ucpd tbody")
-	table.each { |a| cols.push(extract(a.css("td"))) }
+	table = parse_page.css("tr")
+	print table
+	table.each { |tr| 
+		# puts "1"
+		# puts table
+		cols.push(extract(tr.css("td"))) 
+	}
+	
+end
+# Pry.start(binding)
+
+CSV.open("crimesdata.csv", "w") do |csv|
+	cols.each do |col|
+		csv << col
+	end
 end
 
-Pry.start(binding)
