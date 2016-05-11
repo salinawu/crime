@@ -34,7 +34,7 @@ dates = "?startDate=#{start_day}%2F#{start_month}%2F#{start_year}&endDate=#{end_
 
 parse_page = Nokogiri::HTML(open(url + dates))
 num_pages = Integer(parse_page.css(".page-count").text.split("/")[1].strip) -1
-table = parse_page.css("tr")
+table = parse_page.css("tbody td")
 cols = []
 
 for i in 0..num_pages
@@ -42,12 +42,25 @@ for i in 0..num_pages
 	dates = "?startDate=#{start_day}%2F#{start_month}%2F#{start_year}&endDate=#{end_day}%2F#{end_month}%2F#{end_year}&offset=#{offset}"
 	parse_page = Nokogiri::HTML(open(url + dates))
 	num_pages = Integer(parse_page.css(".page-count").text.split("/")[1].strip) -1
-	table = parse_page.css("tr")
-	print table
-	table.each { |tr| 
+	table = parse_page.css("tbody td")
+	
+	j = 0
+	col = []
+
+	table.each { |td| 
 		# puts "1"
 		# puts table
-		cols.push(extract(tr.css("td"))) 
+		if j==6
+			cols.push(col)
+			j=0
+			col=[]
+		elsif j == 2
+			j+=1
+			next
+		else
+			j+=1
+			col.push(td.text.delete("\n"))
+		end
 	}
 	
 end
