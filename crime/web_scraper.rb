@@ -7,21 +7,6 @@ require 'open-uri'
 
 require 'clockwork'
 
-#gets the type of incident, time of occurence, further explaination (comments), and disposition
-def extract(column)
-	array = []
-	i = 0
-	column.each { |a|
-		if i == 2 || i==6
-			i+=1
-			next
-		end
-			i+=1
-			array.push(a.text.delete("\n"))
-	}
-	return array
-end
-
 url = 'https://incidentreports.uchicago.edu/incidentReportArchive.php'
 start_day = 4
 start_month = 11
@@ -64,7 +49,6 @@ for i in 0..num_pages
 	}
 	
 end
-# Pry.start(binding)
 
 CSV.open("crimesdata.csv", "w") do |csv|
 	cols.each do |col|
