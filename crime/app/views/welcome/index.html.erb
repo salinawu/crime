@@ -1,6 +1,4 @@
-<h1>Hyde Park Crime Mapping</h1>
 <!-- key: AIzaSyAbZbQ1OXo5JR2T3fcuZTfwipr772I-VyE -->
-
 <html>
   <head>
     <title>Simple Map</title>
@@ -11,37 +9,49 @@
 
   <body>
 
+    <h1>Hyde Park Crime Mapping</h1>
     <div class="container">
       <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-4" id="selections">
 
-          <div class="row">
-            <input id="address" type="textbox">
-            <button class="btn btn-default" type="submit" id="submit">Address</button>
-          </div>
+          <form class="form-inline">
 
-          <div class="row">
-            <div class='col-sm-6'>
-                <div class="form-group">
-                    <div class='input-group date' id='datetimepicker6'>
-                        <input type='text' class="form-control" />
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
-                    </div>
-                </div>
+            <div class="row">
+              <div class="form-group">
+                <label for="address" class="sr-only">Address</label>
+                <input id="address" type="textbox" placeholder="Address">
+                <label for="key-words" class="sr-only">KeyWords</label>
+                <input id="key-words" type="textbox" placeholder="Key Words">
+              </div>
             </div>
-            <div class='col-sm-6'>
-                <div class="form-group">
-                    <div class='input-group date' id='datetimepicker7'>
-                        <input type='text' class="form-control" />
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
-                    </div>
+
+            <div class="row">
+              <div class="form-group">
+                <div class='input-group date' id='datetimepicker6'>
+                  <input type='text' class="form-control" />
+                  <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                  </span>
                 </div>
+              </div>
+
+              <div class="form-group">
+                <div class='input-group date' id='datetimepicker7'>
+                  <input type='text' class="form-control" />
+                  <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                  </span>
+                </div>
+              </div>
             </div>
-          </div>
+
+            <div class="row">
+              <div class="form-group">
+                <button class="btn btn-default" type="submit" id="submit">Submit</button>
+              </div>
+            </div>
+
+          </form>
 
         </div>
         <div class="col-sm-8" id="map"></div>
