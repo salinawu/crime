@@ -47,9 +47,9 @@ for i in 0..num_pages
 	table.each { |tr| 
 		# puts "1"
 		# puts table
-		cols.push(extract(tr.css("td"))) 
+		cols.push(extract(tr.css("td")))
 	}
-	
+
 end
 # Pry.start(binding)
 
@@ -62,4 +62,3 @@ end
 # puts "hello i'm salina \n"
 # print(cols)
 # Pry.start(binding)
-
