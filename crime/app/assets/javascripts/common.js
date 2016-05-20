@@ -1,15 +1,15 @@
 $(function () {
-    $('#datetimepicker6').datetimepicker({
+    $('#timepickerstart').datetimepicker({
     	format: 'MM/DD/YYYY'
     });
-    $('#datetimepicker7').datetimepicker({
+    $('#timepickerend').datetimepicker({
     	format: 'MM/DD/YYYY',
         useCurrent: false //Important! See issue #1075
     });
-    $("#datetimepicker6").on("dp.change", function (e) {
-        $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+    $("#timepickerstart").on("dp.change", function (e) {
+        $('#timepickerend').data("DateTimePicker").minDate(e.date);
     });
-    $("#datetimepicker7").on("dp.change", function (e) {
-        $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+    $("#timepickerend").on("dp.change", function (e) {
+        $('#timepickerstart').data("DateTimePicker").maxDate(e.date);
     });
 });
