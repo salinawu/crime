@@ -50,7 +50,9 @@ for i in 0..num_pages
 
 end
 
+labels = ["incident", "loc", "time", "comments", "disposition"]
 CSV.open("crimesdata.csv", "w") do |csv|
+	csv << labels
 	cols.each do |col|
 		csv << col
 	end

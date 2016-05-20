@@ -7,7 +7,8 @@ gem 'rails', '4.2.5'
 
 gem "therubyracer"
 gem "twitter-bootstrap-rails"
-
+gem "csv2json"
+gem "orderedhash"
 gem 'bootstrap-sass',       '3.2.0.0'
 gem 'clockwork', '~> 2.0'
 gem 'whenever', :require => false
