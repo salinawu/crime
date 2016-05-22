@@ -15,30 +15,32 @@ $(function () {
 });
 
 var map;
+var marker_geocoder;
+
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 41.79, lng: -87.6},
     zoom: 15
   });
 
-  var geocoder = new google.maps.Geocoder();
+  // var geocoder = new google.maps.Geocoder();
 
-  document.getElementById('submit').addEventListener('click', function() {
-    geocodeAddress(geocoder, map);
-  });
+  // document.getElementById('submit').addEventListener('click', function() {
+  //   geocodeAddress(geocoder, map);
+  // });
 
-  var marker_geocoder = new google.maps.Geocoder();
+  marker_geocoder = new google.maps.Geocoder();
   var address = "5717 South Kimbark Ave. 60637";
   addMarker(map, marker_geocoder, address);
 
-  var crime_list = ["Chicago"];
-  for (var i = 0; i < crime_list.length; i++) {
-    addMarker(map, marker_geocoder, crime_list[i]);
-  }
+  // var crime_list = ["Chicago"];
+  // for (var i = 0; i < crime_list.length; i++) {
+  //   addMarker(map, marker_geocoder, crime_list[i]);
+  // }
 }
 
-function addMarker(map, marker_geocoder, hp) {
-  marker_geocoder.geocode({'address': hp}, function(results, status) {
+function addMarker(map, marker_geocoder, addr) {
+  marker_geocoder.geocode({'address': addr}, function(results, status) {
     if (status === google.maps.GeocoderStatus.OK) {
       var marker = new google.maps.Marker({
         map: map,
@@ -72,10 +74,15 @@ function geocodeAddress(geocoder, resultsMap) {
   });
 }
 
-$("#submit").on("submit", function(event) {
-  event.preventDefault();
-  $.post("URL", $("#form").serialize(), "JSON", function(data) {
+$(document).ready(function() {
 
+    $("#submit").on("submit", function(event) {
+      event.preventDefault();
+      $.post($("#form").attr("action"), $("#form").serialize(), "JSON", function(data) {
+        $.each(data, function(index, addressses) {
+            addMarker(map, marker_geocoder, data[index]);
+        });
+    });
   });
 
 });

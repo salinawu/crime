@@ -1,59 +1,75 @@
 require 'Nokogiri'
-require 'JSON'
-# require 'Pry'
-require 'csv'
+require 'json'
 require 'open-uri'
-# require "whenever"
 
-require 'clockwork'
+def writeCSV(cols)
+	labels = ["incident", "loc", "time", "comments", "disposition"]
+	CSV.open("crimesdata.csv", "w", :headers => true) do |csv|
+		csv << labels
+		cols.each do |col|
+			csv << col
+		end
+	end
+end
 
-url = 'https://incidentreports.uchicago.edu/incidentReportArchive.php'
-start_day = 4
-start_month = 11
-start_year = 2016
-end_day = 4
-end_month = 14
-end_year = 2016
-offset = 0
-dates = "?startDate=#{start_day}%2F#{start_month}%2F#{start_year}&endDate=#{end_day}%2F#{end_month}%2F#{end_year}&offset=#{offset}"
+def webscrap()
+	start_day = ARGV[0]
+	start_month = ARGV[1]
+	start_year = ARGV[2]
+	end_day = ARGV[3]
+	end_month = ARGV[4]
+	end_year = ARGV[5]
 
-parse_page = Nokogiri::HTML(open(url + dates))
-num_pages = Integer(parse_page.css(".page-count").text.split("/")[1].strip) -1
-table = parse_page.css("tbody td")
-cols = []
-
-for i in 0..num_pages
-	offset = 5*i
+	url = 'https://incidentreports.uchicago.edu/incidentReportArchive.php'
+	offset = 0
 	dates = "?startDate=#{start_day}%2F#{start_month}%2F#{start_year}&endDate=#{end_day}%2F#{end_month}%2F#{end_year}&offset=#{offset}"
+
 	parse_page = Nokogiri::HTML(open(url + dates))
 	num_pages = Integer(parse_page.css(".page-count").text.split("/")[1].strip) -1
 	table = parse_page.css("tbody td")
+	cols = []
 
-	j = 0
-	col = []
+	for i in 0..num_pages
+		offset = 5*i
+		dates = "?startDate=#{start_day}%2F#{start_month}%2F#{start_year}&endDate=#{end_day}%2F#{end_month}%2F#{end_year}&offset=#{offset}"
+		parse_page = Nokogiri::HTML(open(url + dates))
+		num_pages = Integer(parse_page.css(".page-count").text.split("/")[1].strip) -1
+		table = parse_page.css("tbody td")
 
-	table.each { |td|
-		# puts "1"
-		# puts table
-		if j==6
-			cols.push(col)
-			j=0
-			col=[]
-		elsif j == 2
-			j+=1
-			next
-		else
-			j+=1
-			col.push(td.text.delete("\n"))
-		end
-	}
+		j = 0
+		col = []
 
-end
+		table.each { |td|
+			if j==6
+				cols.push({"Crime" => col})
+				j=0
+				col=[]
+			elsif j == 2
+				j+=1
+				next
+			else
+				case j
+				when 0
+					col.push({"Incident" => td.text.delete("\n")})
+				when 1
+					col.push({"Location" => td.text.delete("\n")})
+				when 3
+					col.push({"Time" => td.text.delete("\n")})
+				when 4
+					col.push({"Comments" => td.text.delete("\n")})
+				else
+					col.push({"Disposition" => td.text.delete("\n")})
+				end
+				j+=1
+				
+			end
+		}
 
-labels = ["incident", "loc", "time", "comments", "disposition"]
-CSV.open("crimesdata.csv", "w") do |csv|
-	csv << labels
-	cols.each do |col|
-		csv << col
 	end
+
+	return cols.to_json
 end
+
+
+#this is the test call
+puts webscrap()

@@ -13,8 +13,44 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-4" id="selections">
+        <div class="col-sm-10 text-left">
+         <%= form_tag :controller => "welcome", :action => "index", :html => {:class => "form-inline", :name => "form", :id => "form"} do %>
 
-          <form class="form-inline" id="form">
+          
+            <div class="form-group">
+            <%= label_tag(:address, "address", class: "sr-only") %>
+            <%= text_field_tag(:address, nil, placeholder: "Address") %>
+
+            <%= label_tag(:key_words, "keywords", class: "sr-only") %>
+            <%= text_field_tag(:key_words, nil, placeholder: "Key Words") %>
+            </div>
+
+            <div class="form-group">
+              <div class="input-group date" id="timepickerstart">
+                <input type="text" class="form-control" name="start" />
+                <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="input-group date" id="timepickerend">
+                <input type="text" class="form-control" name="end"/>
+                <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+              </div>
+            </div>
+
+          <div class="form-group">
+            <%= button_tag("Submit", type: "button", id: "submit", class: ["btn", "btn-default"]) %>
+          </div>
+
+        <% end %> 
+        </div>
+
+         <!--  <form class="form-inline" id="form" action="results" method="get">
 
             <div class="row">
               <div class="form-group">
@@ -51,7 +87,7 @@
               </div>
             </div>
 
-          </form>
+          </form> -->
 
         </div>
         <div class="col-sm-8" id="map"></div>

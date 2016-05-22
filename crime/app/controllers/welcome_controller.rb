@@ -1,10 +1,16 @@
 class WelcomeController < ApplicationController
 #displays the index page
   def index
-  end
+  	address = params[:address]
+  	key_words = params["key_words"]
+  	start_date = params["start"]
+	end_date = params["end"]
 
-#handles post requests
-  def results
-  	
+
+
+	#DO NOT FORGET TO SANITIZE INPUT DATA AND VALIDATE
+	#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
   end
 end
