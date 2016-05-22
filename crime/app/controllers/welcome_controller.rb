@@ -23,9 +23,6 @@ class WelcomeController < ApplicationController
 
 	addresses = []
 	parsed_json = JSON.parse(WebScraper.runscript(4, 11, 2016, 4, 14, 2016))
-	parsed_json.each do |crime|
-		addresses.push(crime["Location"])
-	end
 
 	render :json => parsed_json
 
