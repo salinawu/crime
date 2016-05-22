@@ -37,28 +37,28 @@ def webscrap()
 		table = parse_page.css("tbody td")
 
 		j = 0
-		col = []
+		col = {}
 
 		table.each { |td|
 			if j==6
-				cols.push({"Crime" => col})
+				cols.push(col)
 				j=0
-				col=[]
+				col={}
 			elsif j == 2
 				j+=1
 				next
 			else
 				case j
 				when 0
-					col.push({"Incident" => td.text.delete("\n")})
+					col[:Incident] = td.text.delete("\n")
 				when 1
-					col.push({"Location" => td.text.delete("\n")})
+					col[:Location] = td.text.delete("\n")
 				when 3
-					col.push({"Time" => td.text.delete("\n")})
+					col[:Time] = td.text.delete("\n")
 				when 4
-					col.push({"Comments" => td.text.delete("\n")})
+					col[:Comments] = td.text.delete("\n")
 				else
-					col.push({"Disposition" => td.text.delete("\n")})
+					col[:Disposition] = td.text.delete("\n")
 				end
 				j+=1
 				

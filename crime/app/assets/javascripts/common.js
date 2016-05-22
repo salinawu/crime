@@ -29,14 +29,10 @@ function initMap() {
   //   geocodeAddress(geocoder, map);
   // });
 
-  marker_geocoder = new google.maps.Geocoder();
-  var address = "5717 South Kimbark Ave. 60637";
-  addMarker(map, marker_geocoder, address);
+  // marker_geocoder = new google.maps.Geocoder();
+  // var address = "5717 South Kimbark Ave. 60637";
+  // addMarker(map, marker_geocoder, address);
 
-  // var crime_list = ["Chicago"];
-  // for (var i = 0; i < crime_list.length; i++) {
-  //   addMarker(map, marker_geocoder, crime_list[i]);
-  // }
 }
 
 function addMarker(map, marker_geocoder, addr) {
@@ -44,7 +40,6 @@ function addMarker(map, marker_geocoder, addr) {
     if (status === google.maps.GeocoderStatus.OK) {
       var marker = new google.maps.Marker({
         map: map,
-        label: 'A',
         position: results[0].geometry.location
       });
     } else {
@@ -55,7 +50,7 @@ function addMarker(map, marker_geocoder, addr) {
 
 function markAddresses(map, marker_geocoder, addresses) {
   for (var i = 0; i < addresses.length; i++) {
-    addMarker(map, marker_geocoder, addresses[i]);
+    addMarker(map, marker_geocoder, addresses[i], i);
   }
 }
 
@@ -69,20 +64,22 @@ function geocodeAddress(geocoder, resultsMap) {
         position: results[0].geometry.location
       });
     } else {
-      alert('Geocode was not successful for the following reason: ' + status);
+        alert('Geocode was not successful for the following reason: ' + status);
     }
   });
 }
 
 $(document).ready(function() {
 
-    $("#submit").on("submit", function(event) {
-      event.preventDefault();
-      $.post($("#form").attr("action"), $("#form").serialize(), "JSON", function(data) {
-        $.each(data, function(index, addressses) {
-            addMarker(map, marker_geocoder, data[index]);
-        });
+    $("#submit").on("click", function(event) {
+        event.preventDefault();
+        $.post($("#form").attr("action"), $("#form").serialize(), function(data) {
+            $.each(data, function(index, addressses) {
+                // alert(data[index]);
+                //alert(data[index]["Location"])
+                addMarker(map, marker_geocoder, data[index]["Location"] + " Chicago 60637");
+            });
+        }, "json");
     });
-  });
 
 });
