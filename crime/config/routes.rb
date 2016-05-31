@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   root 'welcome#index'
-  post "/" => "welcome#search"
+  post "/" => "welcome#search", :as => :search
   # match "/", to: "welcome#search", via: [:get, :post]
   
 

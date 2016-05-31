@@ -16,18 +16,17 @@ $(function () {
 
 var map;
 var marker_geocoder;
+var markersArray = [];
+  
+function clearOverlays() { 
+  for (i in markersArray) markersArray[i].setMap(null); markersArray = []; 
+}
 
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 41.79, lng: -87.6},
     zoom: 15
   });
-
-  // var geocoder = new google.maps.Geocoder();
-
-  // document.getElementById('submit').addEventListener('click', function() {
-  //   geocodeAddress(geocoder, map);
-  // });
 
   // marker_geocoder = new google.maps.Geocoder();
   // var address = "5717 South Kimbark Ave. 60637";
@@ -42,6 +41,8 @@ function addMarker(map, marker_geocoder, addr) {
         map: map,
         position: results[0].geometry.location
       });
+      markersArray.push(marker);
+      google.maps.event.addListener(marker,"click",function(){});
     } else {
       alert('Geocode was not successful for the following reason: ' + status);
     }
@@ -54,31 +55,24 @@ function markAddresses(map, marker_geocoder, addresses) {
   }
 }
 
-function geocodeAddress(geocoder, resultsMap) {
-  var address = document.getElementById('address').value;
-  geocoder.geocode({'address': address}, function(results, status) {
-    if (status === google.maps.GeocoderStatus.OK) {
-      resultsMap.setCenter(results[0].geometry.location);
-      var marker = new google.maps.Marker({
-        map: resultsMap,
-        position: results[0].geometry.location
-      });
-    } else {
-        alert('Geocode was not successful for the following reason: ' + status);
-    }
-  });
-}
-
 $(document).ready(function() {
 
     $("#submit").on("click", function(event) {
         event.preventDefault();
         $.post($("#form").attr("action"), $("#form").serialize(), function(data) {
-            $.each(data, function(index, addressses) {
-                // alert(data[index]);
-                //alert(data[index]["Location"])
+
+          if (data.hasOwnProperty("address")) {
+            clearOverlays();
+            addMarker(map, marker_geocoder, data["address"] + " Chicago 60637");
+          } else if (data.hasOwnProperty("key_words")) {
+
+          } else if (data.hasOwnProperty("addresses")) {
+            clearOverlays();
+            $.each(data["addresses"], function(index, addressses) {
                 addMarker(map, marker_geocoder, data[index]["Location"] + " Chicago 60637");
             });
+          } 
+
         }, "json");
     });
 
