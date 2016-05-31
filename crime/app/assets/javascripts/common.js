@@ -27,11 +27,7 @@ function initMap() {
     center: {lat: 41.79, lng: -87.6},
     zoom: 15
   });
-
-  // marker_geocoder = new google.maps.Geocoder();
-  // var address = "5717 South Kimbark Ave. 60637";
-  // addMarker(map, marker_geocoder, address);
-
+  marker_geocoder = new google.maps.Geocoder();
 }
 
 function addMarker(map, marker_geocoder, addr) {
@@ -66,9 +62,9 @@ $(document).ready(function() {
             addMarker(map, marker_geocoder, data["address"] + " Chicago 60637");
           } else if (data.hasOwnProperty("key_words")) {
 
-          } else if (data.hasOwnProperty("addresses")) {
+          } else {
             clearOverlays();
-            $.each(data["addresses"], function(index, addressses) {
+            $.each(data, function(index, addressses) {
                 addMarker(map, marker_geocoder, data[index]["Location"] + " Chicago 60637");
             });
           } 

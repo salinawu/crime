@@ -36,6 +36,7 @@ class WebScraper < ActiveRecord::Base
 			col = {}
 
 			table.each { |td|
+				td = safe_encode(td.text)
 				if j==6
 					cols.push(col)
 					j=0
@@ -46,15 +47,15 @@ class WebScraper < ActiveRecord::Base
 				else
 					case j
 					when 0
-						col[:Incident] = td.text.delete("\n")
+						col[:Incident] = td.delete("\n")
 					when 1
-						col[:Location] = td.text.delete("\n").gsub(/\(.*\)/, "")
+						col[:Location] = td.delete("\n").gsub(/\(.*\)/, "")
 					when 3
-						col[:Time] = td.text.delete("\n")
+						col[:Time] = td.delete("\n")
 					when 4
-						col[:Comments] = td.text.delete("\n")
+						col[:Comments] = td.delete("\n")
 					else
-						col[:Disposition] = td.text.delete("\n")
+						col[:Disposition] = td.delete("\n")
 					end
 					j+=1
 
@@ -64,6 +65,10 @@ class WebScraper < ActiveRecord::Base
 		end
 
 		return cols.to_json
+	end
+
+	def self.safe_encode(word)
+	 	return word.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
 	end
 
 end

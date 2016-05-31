@@ -1,4 +1,4 @@
-require "date"
+require "Date"
 require "json"
 
 
@@ -11,22 +11,25 @@ class WelcomeController < ApplicationController
   	logger.debug(params.inspect)
   	address = params[:address]
   	key_words = params[:key_words]
-  	start_date = params[:start]
-	end_date = params[:end]
+  	date_format = "%m/%d/%Y"
+  	start_date = Date.today - 7
+	end_date = Date.today
 
-	#DO NOT FORGET TO SANITIZE INPUT DATA AND VALIDATE
-	#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	date_format = "%m/%d/%Y"
-
-	addresses = []
-	parsed_json = JSON.parse(WebScraper.runscript(4, 11, 2016, 4, 14, 2016))
-
-	if (params[:address].present?)
-		render :json => {:address => params[:address]}
-	elsif (params[:address].present?)
+	if (address.present?)
+		render :json => {:address => address}
+	elsif (key_words.present?)
 		render plain: "OK"
-	else
-		render :json => parsed_json
+	elsif (start_date.present? || end_date.present?)
+		sdate = params[:start].present? ? Date.strptime(params[:start], date_format) : start_date
+		edate = end_date
+		if (params[:end].present?)
+			edate = Date.strptime(params[:end])
+		elsif (params[:start].present? && !params[:end].present?)
+			edate = sdate + 7
+		end
+		json_addresses = JSON.parse(WebScraper.runscript(sdate.month, sdate.day, sdate.year,
+		 edate.month, edate.day, edate.year))
+		render :json => json_addresses
 	end
 
   end
