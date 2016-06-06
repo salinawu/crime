@@ -55,11 +55,15 @@ $(document).ready(function() {
 
     $("#submit").on("click", function(event) {
         event.preventDefault();
+        $("#notes").empty();
+        
         $.post($("#form").attr("action"), $("#form").serialize(), function(data) {
 
           if (data.hasOwnProperty("address")) {
             clearOverlays();
             addMarker(map, marker_geocoder, data["address"] + " Chicago 60637");
+          } else if (data.hasOwnProperty("timetraveling")) {
+            $("#notes").html(data["timetraveling"]);
           } else {
             clearOverlays();
             $.each(data, function(index, addressses) {

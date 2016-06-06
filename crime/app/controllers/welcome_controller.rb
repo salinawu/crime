@@ -1,5 +1,6 @@
 require "Date"
 require "json"
+require "set"
 
 
 class WelcomeController < ApplicationController
@@ -28,23 +29,30 @@ class WelcomeController < ApplicationController
 			edate = sdate + 7
 		end
 
+		today = Date.today
+		if (sdate > today || edate > today)
+			render :json => {:timetraveling => "<h5>The future is unknown! </br> 
+				(Gotta put in a date that's today or from the past) </h5>".html_safe }
+			return
+		end
+
 	end
 
 	if (key_words.present?)
 		kw_array = key_words.split(" ")
 		json_addresses = WebScraper.runscript(sdate.month, sdate.day, sdate.year,
 		 edate.month, edate.day, edate.year)
-		to_ret = []
+		to_ret = Set.new([])
 
 		json_addresses.each do |addr|
 			kw_array.each do |kw|
 				if (addr[:Comments].downcase().include?(kw.downcase()) || 
 					addr[:Incident].downcase().include?(kw.downcase()))
-					to_ret << addr
+					to_ret.add(addr)
 				end
 			end
 		end
-		render :json => to_ret.map { |o| Hash[o.each_pair.to_a] }.to_json
+		render :json => to_ret.to_a.map { |o| Hash[o.each_pair.to_a] }.to_json
 		return
 	end
 
