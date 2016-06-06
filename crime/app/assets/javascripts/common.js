@@ -39,8 +39,11 @@ function addMarker(map, marker_geocoder, addr) {
       });
       markersArray.push(marker);
       google.maps.event.addListener(marker,"click",function(){});
+
+    } else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+      setTimeout(function() { addMarker(map, marker_geocoder, addr) }, 200);
     } else {
-      alert('Geocode was not successful for the following reason: ' + status);
+      alert("Geocode was not successful for the following reason: " + status);
     }
   });
 }
@@ -56,7 +59,7 @@ $(document).ready(function() {
     $("#submit").on("click", function(event) {
         event.preventDefault();
         $("#notes").empty();
-        
+
         $.post($("#form").attr("action"), $("#form").serialize(), function(data) {
 
           if (data.hasOwnProperty("address")) {
