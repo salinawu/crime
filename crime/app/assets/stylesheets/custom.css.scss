@@ -22,10 +22,11 @@ body {
 	font-size: 11px;
 }
 
-.simplebox {
-  outline: none;
-  border: none !important;
-  -webkit-box-shadow: none !important;
-  -moz-box-shadow: none !important;
-  box-shadow: none !important;
+#infobox {
+	font-family: 'Muli', sans-serif;
+	font-weight: 300;
+}
+
+.infolabel {
+	font-weight: 400;
 }

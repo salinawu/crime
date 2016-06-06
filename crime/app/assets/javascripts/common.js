@@ -30,15 +30,24 @@ function initMap() {
   marker_geocoder = new google.maps.Geocoder();
 }
 
-function addMarker(map, marker_geocoder, addr) {
-  marker_geocoder.geocode({'address': addr}, function(results, status) {
+function addMarker(map, marker_geocoder, crime) {
+  marker_geocoder.geocode({'address': crime["Location"] + " Chicago 60637"}, function(results, status) {
     if (status === google.maps.GeocoderStatus.OK) {
       var marker = new google.maps.Marker({
         map: map,
         position: results[0].geometry.location
       });
+      var infowindow = new google.maps.InfoWindow({
+        content: generateInfoString(crime["Incident"], crime["Location"],
+          crime["Time"], crime["Comments"], crime["Disposition"])
+      });
+      marker.addListener('click', function() {
+        infowindow.open(map, marker);
+      });
+
       markersArray.push(marker);
-      google.maps.event.addListener(marker,"click",function(){});
+
+      // google.maps.event.addListener(marker,"click",function(){});
 
     } else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
       setTimeout(function() { addMarker(map, marker_geocoder, addr) }, 200);
@@ -52,6 +61,15 @@ function markAddresses(map, marker_geocoder, addresses) {
   for (var i = 0; i < addresses.length; i++) {
     addMarker(map, marker_geocoder, addresses[i], i);
   }
+}
+
+function generateInfoString(incid, loc, time, comm, disposit) {
+  return "<div id='infobox'><h5>" + incid + "</h5>"
+    + "<span class='infolabel'>Location: </span> <div class='infocontent'>" + loc + "</div> </ br>" 
+    + "<span class='infolabel'>Time: </span> <div class='infocontent'>" + time + "</div> </ br>" 
+    + "<span class='infolabel'>Comments: </span> <div class='infocontent'>" + comm + "</div> </ br>"
+    + "<span class='infolabel'>Status: </span> <div class='infocontent'>" + disposit + "</div> </ br>" 
+    +  "</div>";
 }
 
 $(document).ready(function() {
@@ -70,7 +88,7 @@ $(document).ready(function() {
           } else {
             clearOverlays();
             $.each(data, function(index, addressses) {
-                addMarker(map, marker_geocoder, data[index]["Location"] + " Chicago 60637");
+                addMarker(map, marker_geocoder, data[index]);
             });
           } 
 
