@@ -8,30 +8,49 @@ class WelcomeController < ApplicationController
   end
 
   def search
-  	logger.debug(params.inspect)
   	address = params[:address]
   	key_words = params[:key_words]
   	date_format = "%m/%d/%Y"
-  	start_date = Date.today - 7
-	end_date = Date.today
+  	sdate = Date.today - 7
+	edate = Date.today
 
 	if (address.present?)
 		render :json => {:address => address}
-	elsif (key_words.present?)
-		render plain: "OK"
-	elsif (start_date.present? || end_date.present?)
-		sdate = params[:start].present? ? Date.strptime(params[:start], date_format) : start_date
-		edate = end_date
+		return
+	end
+
+
+	if (params[:start].present? || params[:end].present?)
+		sdate = params[:start].present? ? Date.strptime(params[:start], date_format) : sdate
 		if (params[:end].present?)
-			edate = Date.strptime(params[:end])
+			edate = Date.strptime(params[:end], date_format)
 		elsif (params[:start].present? && !params[:end].present?)
 			edate = sdate + 7
 		end
-		json_addresses = JSON.parse(WebScraper.runscript(sdate.month, sdate.day, sdate.year,
-		 edate.month, edate.day, edate.year))
-		render :json => json_addresses
+
 	end
 
+	if (key_words.present?)
+		kw_array = key_words.split(" ")
+		json_addresses = WebScraper.runscript(sdate.month, sdate.day, sdate.year,
+		 edate.month, edate.day, edate.year)
+		to_ret = []
+
+		json_addresses.each do |addr|
+			kw_array.each do |kw|
+				if (addr[:Comments].downcase().include?(kw.downcase()) || 
+					addr[:Incident].downcase().include?(kw.downcase()))
+					to_ret << addr
+				end
+			end
+		end
+		render :json => to_ret.map { |o| Hash[o.each_pair.to_a] }.to_json
+		return
+	end
+
+	render :json => WebScraper.runscript(sdate.month, sdate.day, sdate.year,
+		 		edate.month, edate.day, edate.year).map { |o| Hash[o.each_pair.to_a] }.to_json
+	
   end
 
 end

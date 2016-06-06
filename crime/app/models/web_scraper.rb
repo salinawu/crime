@@ -64,7 +64,7 @@ class WebScraper < ActiveRecord::Base
 
 		end
 
-		return cols.to_json
+		return cols
 	end
 
 	def self.safe_encode(word)

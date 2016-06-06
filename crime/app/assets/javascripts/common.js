@@ -60,8 +60,6 @@ $(document).ready(function() {
           if (data.hasOwnProperty("address")) {
             clearOverlays();
             addMarker(map, marker_geocoder, data["address"] + " Chicago 60637");
-          } else if (data.hasOwnProperty("key_words")) {
-
           } else {
             clearOverlays();
             $.each(data, function(index, addressses) {
