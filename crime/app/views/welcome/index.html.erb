@@ -5,6 +5,7 @@
     <title>Simple Map</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
+    <link href='https://fonts.googleapis.com/css?family=Muli:400' rel='stylesheet' type='text/css'>
   </head>
 
   <body>
@@ -20,10 +21,10 @@
           
             <div class="form-group">
             <%= label_tag(:address, params[:address], class: "sr-only") %>
-            <%= f.text_field_tag(:address, nil, placeholder: "Address") %>
+            <%= f.text_field_tag(:address, nil, placeholder: "ADDRESS", class: "ipt") %>
 
             <%= label_tag(:key_words, params[:key_words], class: "sr-only") %>
-            <%= f.text_field_tag(:key_words, nil, placeholder: "Key Words") %>
+            <%= f.text_field_tag(:key_words, nil, placeholder: "KEY WORDS", class: "ipt") %>
             </div>
 
             <div class="form-group">
@@ -45,7 +46,7 @@
             </div>
 
           <div class="form-group">
-            <%= submit_tag("Submit", type: "button", id: "submit", class: ["btn", "btn-default"]) %>
+            <%= submit_tag("SUBMIT", type: "button", id: "submit", class: ["btn", "btn-default"]) %>
             <div id="notes"></div>
           </div>
 

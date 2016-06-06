@@ -1,2 +1,31 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
+
+body {
+	font-family: 'Muli', sans-serif;
+}
+
+.ipt {
+	width: 80%;
+	height: 30px;
+	margin: 5px;
+	font-size: 13px;
+}
+
+.date {
+	margin: 5px;
+}
+
+.btn {
+	margin: 5px;
+	text-align:center;
+	font-size: 11px;
+}
+
+.simplebox {
+  outline: none;
+  border: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
+}
