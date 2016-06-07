@@ -95,4 +95,7 @@ $(document).ready(function() {
         }, "json");
     });
 
+    $("#footer-toggle").on("click", function() {
+       $("#footer").toggle();
+    });
 });
