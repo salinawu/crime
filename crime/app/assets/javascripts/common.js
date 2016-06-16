@@ -83,8 +83,8 @@ $(document).ready(function() {
           if (data.hasOwnProperty("address")) {
             clearOverlays();
             addMarker(map, marker_geocoder, data["address"] + " Chicago 60637");
-          } else if (data.hasOwnProperty("timetraveling")) {
-            $("#notes").html(data["timetraveling"]);
+          } else if (data.hasOwnProperty("notes")) {
+            $("#notes").html(data["notes"]);
           } else {
             clearOverlays();
             $.each(data, function(index, addressses) {

@@ -30,8 +30,8 @@ class WelcomeController < ApplicationController
 		end
 
 		today = Date.today
-		if (sdate > today || edate > today)
-			render :json => {:timetraveling => "<h5>The future is unknown! </br> 
+		if (sdate > today || (params[:end].present? && edate > today))
+			render :json => {:notes => "<h5>The future is unknown! </br> 
 				(Gotta put in a date that's today or from the past) </h5>".html_safe }
 			return
 		end
@@ -39,7 +39,7 @@ class WelcomeController < ApplicationController
 	end
 
 	if (key_words.present?)
-		kw_array = key_words.split(" ")
+		kw_array = key_words.split(/[\s,]/)
 		json_addresses = WebScraper.runscript(sdate.month, sdate.day, sdate.year,
 		 edate.month, edate.day, edate.year)
 		to_ret = Set.new([])
@@ -52,12 +52,26 @@ class WelcomeController < ApplicationController
 				end
 			end
 		end
-		render :json => to_ret.to_a.map { |o| Hash[o.each_pair.to_a] }.to_json
+
+		if (to_ret.empty?)
+			render :json => {:notes => "<h5>A crime-free time! </br> 
+				(At least around here.) </h5>".html_safe }
+		else
+			render :json => to_ret.to_a.map { |o| Hash[o.each_pair.to_a] }.to_json
+		end
+	
 		return
 	end
 
-	render :json => WebScraper.runscript(sdate.month, sdate.day, sdate.year,
-		 		edate.month, edate.day, edate.year).map { |o| Hash[o.each_pair.to_a] }.to_json
+	to_ret = WebScraper.runscript(sdate.month, sdate.day, sdate.year,
+		 		edate.month, edate.day, edate.year)
+
+	if (to_ret.empty?)
+		render :json => {:notes => "<h5>A crime-free time! </br> 
+			(At least around here) </h5>".html_safe }
+	else
+		render :json => to_ret.map { |o| Hash[o.each_pair.to_a] }.to_json
+	end
 	
   end
 
