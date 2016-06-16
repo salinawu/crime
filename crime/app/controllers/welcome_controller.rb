@@ -15,12 +15,6 @@ class WelcomeController < ApplicationController
   	sdate = Date.today - 7
 	edate = Date.today
 
-	if (address.present?)
-		render :json => {:address => address}
-		return
-	end
-
-
 	if (params[:start].present? || params[:end].present?)
 		sdate = params[:start].present? ? Date.strptime(params[:start], date_format) : sdate
 		if (params[:end].present?)
@@ -56,8 +50,11 @@ class WelcomeController < ApplicationController
 		if (to_ret.empty?)
 			render :json => {:notes => "<h5>A crime-free time! </br> 
 				(At least around here.) </h5>".html_safe }
+		elsif (address.present?)
+			render :json =>{:addresses => to_ret.map { |o| Hash[o.each_pair.to_a] },
+							:searchaddr => address}
 		else
-			render :json => to_ret.to_a.map { |o| Hash[o.each_pair.to_a] }.to_json
+			render :json => to_ret.to_a.map { |o| Hash[o.each_pair.to_a] }
 		end
 	
 		return
@@ -69,8 +66,11 @@ class WelcomeController < ApplicationController
 	if (to_ret.empty?)
 		render :json => {:notes => "<h5>A crime-free time! </br> 
 			(At least around here) </h5>".html_safe }
+	elsif (address.present?)
+		render :json =>{:addresses => to_ret.map { |o| Hash[o.each_pair.to_a] },
+						:searchaddr => address}
 	else
-		render :json => to_ret.map { |o| Hash[o.each_pair.to_a] }.to_json
+		render :json => to_ret.map { |o| Hash[o.each_pair.to_a] }
 	end
 	
   end
