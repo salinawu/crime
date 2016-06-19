@@ -47,22 +47,18 @@ class WelcomeController < ApplicationController
 			end
 		end
 
-		# todo : make block into a private function
-		if (to_ret.empty?)
-			render :json => {:notes => "<h5>A crime-free time! </br> 
-				(At least around here.) </h5>".html_safe }
-		elsif (address.present?)
-			render :json => { :addresses => to_ret.map { |o| Hash[o.each_pair.to_a] } }
-		else
-			render :json => to_ret.to_a.map { |o| Hash[o.each_pair.to_a] }
-		end
-	
+		what_to_return(to_ret, address)
 		return
 	end
 
 	to_ret = WebScraper.runscript(sdate.month, sdate.day, sdate.year,
 		 		edate.month, edate.day, edate.year)
 
+	what_to_return(to_ret, address)
+	
+  end
+
+  def what_to_return(to_ret, address)
 	if (to_ret.empty?)
 		render :json => {:notes => "<h5>A crime-free time! </br> 
 			(At least around here) </h5>".html_safe }
@@ -71,7 +67,8 @@ class WelcomeController < ApplicationController
 	else
 		render :json => to_ret.map { |o| Hash[o.each_pair.to_a] }
 	end
-	
   end
+
+  private :what_to_return
 
 end
