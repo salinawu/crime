@@ -131,9 +131,9 @@ function markWithinXDist(addresses, targetAddress) {
         var targetGSC = new GSC(results[0].geometry.location.lng(), results[0].geometry.location.lat());
         if (typeof targetGSC !== undefined) {
           for (var i = 0; i < addresses.length; i++) {
-            if (isValidEntry(addresses[i])) {
+            // if (isValidEntry(addresses[i])) {
                getLongLat(addresses[i], targetGSC);
-            }
+            // }
           }
         }
       }
