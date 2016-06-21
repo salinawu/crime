@@ -17,9 +17,9 @@ $(function () {
 var map;
 var marker_geocoder;
 var markersArray = [];
-  
-function clearOverlays() { 
-  for (i in markersArray) markersArray[i].setMap(null); markersArray = []; 
+
+function clearOverlays() {
+  for (i in markersArray) markersArray[i].setMap(null); markersArray = [];
 }
 
 function initMap() {
@@ -37,12 +37,20 @@ function addMarker(map, marker_geocoder, crime) {
         map: map,
         position: results[0].geometry.location
       });
+
       var infowindow = new google.maps.InfoWindow({
         content: generateInfoString(crime["Incident"], crime["Location"],
-          crime["Time"], crime["Comments"], crime["Disposition"])
+          crime["Time"], crime["Comments"], crime["Disposition"]),
+        maxWidth: 200
       });
+
       marker.addListener('click', function() {
-        infowindow.open(map, marker);
+        if (marker.getAnimation() !== null) {
+          marker.setAnimation(null);
+          infowindow.close();
+        } else {
+          infowindow.open(map, marker);
+        }
       });
 
       markersArray.push(marker);
@@ -63,10 +71,10 @@ function markAddresses(map, marker_geocoder, addresses) {
 
 function generateInfoString(incid, loc, time, comm, disposit) {
   return "<div id='infobox'><h5>" + incid + "</h5>"
-    + "<span class='infolabel'>Location: </span> <div class='infocontent'>" + loc + "</div> </ br>" 
-    + "<span class='infolabel'>Time: </span> <div class='infocontent'>" + time + "</div> </ br>" 
+    + "<span class='infolabel'>Location: </span> <div class='infocontent'>" + loc + "</div> </ br>"
+    + "<span class='infolabel'>Time: </span> <div class='infocontent'>" + time + "</div> </ br>"
     + "<span class='infolabel'>Comments: </span> <div class='infocontent'>" + comm + "</div> </ br>"
-    + "<span class='infolabel'>Status: </span> <div class='infocontent'>" + disposit + "</div> </ br>" 
+    + "<span class='infolabel'>Status: </span> <div class='infocontent'>" + disposit + "</div> </ br>"
     +  "</div>";
 }
 
@@ -81,8 +89,8 @@ class GSC {
   }
 
   isWithInPointFourMiles(other, dist) {
-    return  ( 3959 * Math.acos( Math.cos( this.degreesToRadians(this.lat) ) * Math.cos( this.degreesToRadians(other.lat) ) * 
-      Math.cos( this.degreesToRadians(other.long) - this.degreesToRadians(this.long) ) + 
+    return  ( 3959 * Math.acos( Math.cos( this.degreesToRadians(this.lat) ) * Math.cos( this.degreesToRadians(other.lat) ) *
+      Math.cos( this.degreesToRadians(other.long) - this.degreesToRadians(this.long) ) +
       Math.sin( this.degreesToRadians(this.lat) ) * Math.sin( this.degreesToRadians(other.lat) ) ) ) <= dist;
   }
 }
@@ -116,7 +124,7 @@ function getLongLat(crime, targetGSC) {
 //bc UCPD's data is forever messed up. must check that crimes are not void or empty
 function isValidEntry(crime) {
   return !crime["Location"] ||
-        (crime["Location"] && crime["Location"].indexOf(":") === -1 && 
+        (crime["Location"] && crime["Location"].indexOf(":") === -1 &&
           crime["Location"].toLowerCase().indexOf("void") === -1);
 }
 
@@ -159,7 +167,7 @@ $(document).ready(function() {
           $.each(data, function(index, addressses) {
             addMarker(map, marker_geocoder, data[index]);
           });
-        } 
+        }
 
       }, "json");
     });
@@ -168,3 +176,29 @@ $(document).ready(function() {
        $("#footer").toggle();
     });
 });
+
+function toggle_note() {
+	var element = document.getElementById("toggle");
+	var text = document.getElementById("text");
+	if(element.style.display == "block") {
+    		element.style.display = "none";
+		text.innerHTML = "Note";
+  	}
+	else {
+		element.style.display = "block";
+		text.innerHTML = "Hide note";
+	}
+}
+
+function toggle_info() {
+	var why = document.getElementById("why");
+	var info = document.getElementById("info");
+	if(why.style.display == "block") {
+    		why.style.display = "none";
+		info.innerHTML = "Why was this created?";
+  	}
+	else {
+		why.style.display = "block";
+		info.innerHTML = "Hide info";
+	}
+}

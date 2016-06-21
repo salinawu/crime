@@ -10,15 +10,15 @@
 
   <body>
 
-    <h1>Hyde Park Crime Mapping</h1>
+    <h1><center>Hyde Park Crime Mapping</center></h1>
     <div class="container">
       <div class="row">
         <div class="col-sm-4" id="selections">
         <div class="col-sm-10 text-left">
-         <%= form_for(search_path, :method => :post, 
+         <%= form_for(search_path, :method => :post,
           :html => {:class => "form-inline", :name => "form", :id => "form"}) do |f| %>
 
-          
+
             <div class="form-group">
             <%= label_tag(:address, params[:address], class: "sr-only") %>
             <%= f.text_field_tag(:address, nil, placeholder: "ADDRESS", class: "ipt") %>
@@ -29,7 +29,7 @@
 
             <div class="form-group">
               <div class="input-group date" id="timepickerstart" name="start_time">
-                <%= f.text_field_tag(:start, nil, class: "form-control") %>
+                <%= f.text_field_tag(:start, nil, placeholder: "START DATE", class: "form-control") %>
                 <span class="input-group-addon">
                   <span class="glyphicon glyphicon-calendar"></span>
                 </span>
@@ -38,7 +38,7 @@
 
             <div class="form-group">
               <div class="input-group date" id="timepickerend" name="end_time">
-                <%= f.text_field_tag(:end, nil, class: "form-control") %>
+                <%= f.text_field_tag(:end, nil, placeholder: "END DATE", class: "form-control") %>
                 <span class="input-group-addon">
                   <span class="glyphicon glyphicon-calendar"></span>
                 </span>
@@ -49,15 +49,28 @@
             <%= button_tag("SUBMIT", type: "button", id: "submit", class: ["btn", "btn-default"]) %>
             <div id="notes"></div>
           </div>
-
-        <% end %> 
+        <% end %>
+        <div class="col-sm-4" id="creation info">
+          <a id="info" href="javascript:toggle_info();">Why was this created?</a>
+          <div id="why" style="display: none">We believe in the importance for Hyde Park residents to be able to
+          be exposed to the full range of crimes in Hypde Park via this uncomplicated, usable interface.
+          Although Marlon Lynch and the Safety, Security & Civic Affairs administration email the occassional
+            security alert concerning crimes on campus, we wanted to bring attention to all crimes to occur in the Hyde
+             Park neighborhood as reported by UCPD, especially with the aid of a visual map. </div>
+        </div>
+        <div class="col-sm-4" id="note">
+          <a id="text" href="javascript:toggle_note();">Note</a>
+          <div id="toggle" style="display: none">Because of Google Map API's limit on the number of queries made per second, some of the bigger search results that span more than a couple of day's worth of stuff will take a couple of seconds to fully load (there's actually a suprising number of entries for a period of say, a week). </br>
+          Please separate key word searches by space or comma.</div>
+        </div>
         </div>
 
         </div>
-        <div class="col-sm-8" id="map"></div>
+        <div class="col-md-8" id="map">
+      </div>
       </div>
 
-      <div class="col-sm-5">
+      <!-- <div class="col-sm-5">
         <footer class="working">
           <span id="footer-toggle">NOTE</span>
           <div id="footer" style="display:none;">
@@ -65,7 +78,15 @@
             Please separate key word searches by space or comma.
           </div>
         </footer>
-      </div>
+      </div> -->
+
+      <footer>
+        <p>Kathleen Lu and Salina Wu </p>
+        <p><a href="mailto:salinawu@uchicago.edu">
+        salinawu@uchicago.edu</a> and <a href="mailto:kathleenl@uchicago.edu">
+        kathleenl@uchicago.edu</a></p>
+      </footer>
+
     </div>
 
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbZbQ1OXo5JR2T3fcuZTfwipr772I-VyE&callback=initMap"

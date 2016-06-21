@@ -4,11 +4,25 @@
 html, body {
     height: 100%;
 }
+
+h1 {
+  padding-bottom: 20px;
+}
 #map {
 	height: 600px;
-	width: 600px;
+	width: 780px;
+  margin: 0px 0px 0px 0px;
+  padding: 0;
+  flex: 1;
 }
 
 #form-group {
-	padding: 5%;
+	padding: 0;
+  float: left;
+  width: 10px;
+  margin: 0px 0px 0px 0px;
+}
+
+#text {
+  width: 50px;
 }
